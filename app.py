@@ -1,14 +1,11 @@
 from flask import Flask,render_template,request
-import google.generativeai as palm
+import google.generativeai as genai
 import os
-import openai
 
-api = ""
-palm.configure(api_key=api)
-model = {"model": "models/chat-bison-001"}
-
-os.environ["OPENAI_API_KEY"] = ""
-client = openai.OpenAI()
+#os.environ["MAKERSUITE_API_KEY] = ""
+api = "AIzaSyCFIL-2qRWHrUqzyf_TN3A5IKQsVgB2zHg"
+genai.configure(api_key=api)
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 app = Flask(__name__)
 
@@ -23,12 +20,8 @@ def ai_agent():
 @app.route("/ai_agent_reply", methods=["GET","POST"])
 def ai_agent_reply():
     q = request.form.get("q")
-    r = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": q}],
-    )
-    r = r.choices[0].message.content
-    return(render_template("ai_agent_reply.html",r=r))
+    r = model.generate_content(q)
+    return(render_template("ai_agent_reply.html",r=r.text))
 
 @app.route("/prediction", methods=["GET","POST"])
 def prediction():
