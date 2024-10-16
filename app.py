@@ -2,7 +2,8 @@ from flask import Flask,render_template,request
 import google.generativeai as genai
 import os
 
-api = os.getenv["MAKERSUITE_API_KEY"]
+#os.environ["MAKERSUITE_API_KEY] = ""
+api = "AIzaSyCFIL-2qRWHrUqzyf_TN3A5IKQsVgB2zHg"
 genai.configure(api_key=api)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
@@ -25,6 +26,10 @@ def ai_agent_reply():
 @app.route("/prediction", methods=["GET","POST"])
 def prediction():
     return(render_template("index.html"))
+
+@app.route("/paynow", methods=["GET","POST"])
+def paynow():
+    return(render_template("paynow.html"))
 
 if __name__ == "__main__":
     app.run()
